@@ -40,8 +40,21 @@ app.MapPost("/api/todos", (TodoCreateRequest request, TodoStore s, TodoStorePers
     return Results.Created($"/api/todos/{item.Id}", item);
 });
 
+app.MapPut("/api/todos/{id:int}", (int id, TodoUpdateRequest request, TodoStore s, TodoStorePersistence p) =>
+{
+    if (!s.Update(id, request.Title, request.Completed, out var updated))
+    {
+        return Results.NotFound();
+    }
+
+    p.Save(s.List());
+    return Results.Ok(updated);
+});
+
 app.UseStaticFiles();
 
 app.Run();
 
 public record TodoCreateRequest(string Title);
+
+public record TodoUpdateRequest(string? Title, bool? Completed);

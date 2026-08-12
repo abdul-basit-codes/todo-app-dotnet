@@ -22,6 +22,18 @@ app.MapGet("/api/health", () => Results.Ok(new { status = "ok", service = "todo-
 
 app.MapGet("/api/todos", (TodoStore s) => Results.Ok(s.List()));
 
+app.MapGet("/api/todos/summary", (TodoStore s) =>
+{
+    var items = s.List();
+    return Results.Ok(new
+    {
+        total = items.Count,
+        active = items.Count(i => !i.Completed),
+        completed = items.Count(i => i.Completed),
+        percent = items.Count == 0 ? 0 : (int)Math.Round(items.Count(i => i.Completed) * 100.0 / items.Count),
+    });
+});
+
 app.MapGet("/api/todos/{id:int}", (int id, TodoStore s) =>
 {
     var item = s.Get(id);

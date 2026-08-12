@@ -28,6 +28,20 @@ app.MapGet("/api/todos/{id:int}", (int id, TodoStore s) =>
     return item is null ? Results.NotFound() : Results.Ok(item);
 });
 
+app.MapPost("/api/todos", (TodoCreateRequest request, TodoStore s, TodoStorePersistence p) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Title))
+    {
+        return Results.BadRequest(new { error = "title is required" });
+    }
+
+    var item = s.Add(request.Title.Trim());
+    p.Save(s.List());
+    return Results.Created($"/api/todos/{item.Id}", item);
+});
+
 app.UseStaticFiles();
 
 app.Run();
+
+public record TodoCreateRequest(string Title);

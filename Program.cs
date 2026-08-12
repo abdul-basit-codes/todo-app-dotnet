@@ -51,6 +51,17 @@ app.MapPut("/api/todos/{id:int}", (int id, TodoUpdateRequest request, TodoStore 
     return Results.Ok(updated);
 });
 
+app.MapDelete("/api/todos/{id:int}", (int id, TodoStore s, TodoStorePersistence p) =>
+{
+    if (!s.Delete(id))
+    {
+        return Results.NotFound();
+    }
+
+    p.Save(s.List());
+    return Results.Ok(new { deleted = true });
+});
+
 app.UseStaticFiles();
 
 app.Run();

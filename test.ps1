@@ -26,7 +26,7 @@ $summary = Invoke-RestMethod "$BaseUrl/api/todos/summary"
 Check "summary endpoint" ($summary.total -ge 1)
 
 $list = Invoke-RestMethod "$BaseUrl/api/todos"
-Check "GET lists task" (($list | Where-Object { $_.id -eq $id }).Count -eq 1)
+Check "GET lists task" (@($list | Where-Object { $_.id -eq $id }).Count -eq 1)
 
 $updated = Invoke-RestMethod -Method Put -Uri "$BaseUrl/api/todos/$id" -ContentType "application/json" -Body '{"completed":true}'
 Check "PUT marks complete" ($updated.completed -eq $true)
@@ -35,7 +35,7 @@ $deleted = Invoke-RestMethod -Method Delete -Uri "$BaseUrl/api/todos/$id"
 Check "DELETE removes task" ($deleted.deleted -eq $true)
 
 $after = Invoke-RestMethod "$BaseUrl/api/todos"
-Check "GET no longer lists deleted" (($after | Where-Object { $_.id -eq $id }).Count -eq 0)
+Check "GET no longer lists deleted" (@($after | Where-Object { $_.id -eq $id }).Count -eq 0)
 
 $html = (Invoke-WebRequest "$BaseUrl/index.html").Content
 Check "serves index.html" ($html -match "TodoApp")

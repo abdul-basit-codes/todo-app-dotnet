@@ -50,7 +50,11 @@
 
       <footer class="list-foot">
         <span id="taskCount">0 tasks</span>
-        <span class="foot-hint">Press Enter to add quickly</span>
+        <div class="progress-wrap" title="Completion progress">
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <span class="progress-label" id="progressLabel">0%</span>
+        </div>
+        <span class="foot-hint">Enter to add</span>
       </footer>
     </section>
   </main>

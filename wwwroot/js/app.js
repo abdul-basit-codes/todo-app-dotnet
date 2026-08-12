@@ -10,6 +10,8 @@ const emptyState = document.getElementById("emptyState");
 const emptyText = document.getElementById("emptyText");
 const formError = document.getElementById("formError");
 const clearCompletedBtn = document.getElementById("clearCompleted");
+const progressFill = document.getElementById("progressFill");
+const progressLabel = document.getElementById("progressLabel");
 
 const filters = Array.from(document.querySelectorAll(".filter"));
 let activeFilter = "all";
@@ -67,6 +69,8 @@ function renderTasks() {
     const title = document.createElement("span");
     title.className = "task-title";
     title.textContent = t.title;
+    title.title = "Click to rename";
+    title.addEventListener("click", () => beginEdit(t.id, title));
 
     const date = document.createElement("span");
     date.className = "task-date";
@@ -84,6 +88,12 @@ function renderTasks() {
 
   const remaining = tasks.filter((t) => !t.completed).length;
   taskCount.textContent = remaining + (remaining === 1 ? " task left" : " tasks left");
+
+  const total = tasks.length;
+  const done = total - remaining;
+  const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+  progressFill.style.width = percent + "%";
+  progressLabel.textContent = percent + "%";
 
   const isEmpty = list.length === 0;
   emptyState.hidden = !isEmpty;
@@ -129,6 +139,37 @@ async function toggleTask(id, completed) {
   } catch (e) {
     alert(e.message);
   }
+}
+
+async function beginEdit(id, element) {
+  const oldValue = element.textContent;
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "composer-input edit-input";
+  input.value = oldValue;
+  input.maxLength = 120;
+
+  const commit = async () => {
+    const newValue = input.value.trim();
+    if (newValue && newValue !== oldValue) {
+      try {
+        await api("PUT", API + "/" + id, { title: newValue });
+      } catch (e) {
+        alert(e.message);
+      }
+    }
+    await loadTasks();
+  };
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { input.blur(); }
+    if (e.key === "Escape") { input.value = oldValue; input.blur(); }
+  });
+  input.addEventListener("blur", commit);
+
+  element.replaceWith(input);
+  input.focus();
+  input.select();
 }
 
 async function deleteTask(id) {

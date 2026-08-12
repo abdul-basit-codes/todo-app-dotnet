@@ -13,20 +13,23 @@ A fully working full-stack to-do application:
 - Create, read, update, and delete tasks
 - Toggle tasks between active and completed
 - Filter by all / active / completed
-- Task count summary
+- Task count summary + animated completion progress bar
+- Inline title editing (click a task title to rename)
+- Clear completed tasks in one click
 - Keyboard-friendly form (Enter to add)
 - Persistence: tasks survive server restarts via `data/todos.json`
 
 ## API
 
-| Method | Route          | Description              |
-|--------|----------------|--------------------------|
-| GET    | /api/todos     | List all tasks           |
-| GET    | /api/todos/:id | Get one task             |
-| POST   | /api/todos     | Create a task            |
-| PUT    | /api/todos/:id | Update title / completed |
-| DELETE | /api/todos/:id | Delete a task            |
-| GET    | /api/health    | Health check             |
+| Method | Route             | Description              |
+|--------|-------------------|--------------------------|
+| GET    | /api/todos        | List all tasks           |
+| GET    | /api/todos/summary | Progress summary (counts + percent) |
+| GET    | /api/todos/:id    | Get one task             |
+| POST   | /api/todos        | Create a task            |
+| PUT    | /api/todos/:id    | Update title / completed |
+| DELETE | /api/todos/:id    | Delete a task            |
+| GET    | /api/health       | Health check             |
 
 Task shape:
 

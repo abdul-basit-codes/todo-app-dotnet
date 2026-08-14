@@ -42,12 +42,18 @@ app.MapGet("/api/todos/{id:int}", (int id, TodoStore s) =>
 
 app.MapPost("/api/todos", (TodoCreateRequest request, TodoStore s, TodoStorePersistence p) =>
 {
-    if (string.IsNullOrWhiteSpace(request.Title))
+    var title = request.Title?.Trim();
+    if (string.IsNullOrWhiteSpace(title))
     {
         return Results.BadRequest(new { error = "title is required" });
     }
 
-    var item = s.Add(request.Title.Trim());
+    if (title.Length > 120)
+    {
+        return Results.BadRequest(new { error = "title must be 120 characters or fewer" });
+    }
+
+    var item = s.Add(title);
     p.Save(s.List());
     return Results.Created($"/api/todos/{item.Id}", item);
 });

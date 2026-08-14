@@ -55,6 +55,15 @@ dotnet run
 Then open http://localhost:5123 in your browser (check the console for the
 exact port).
 
+## Run with Docker
+
+```sh
+docker build -t todo-app .
+docker run --rm -p 8080:8080 todo-app
+```
+
+Then open http://localhost:8080.
+
 ## Project layout
 
 ```

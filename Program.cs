@@ -74,6 +74,13 @@ app.MapDelete("/api/todos/{id:int}", (int id, TodoStore s, TodoStorePersistence 
     return Results.Ok(new { deleted = true });
 });
 
+app.MapPost("/api/todos/clear-completed", (TodoStore s, TodoStorePersistence p) =>
+{
+    var removed = s.DeleteCompleted();
+    p.Save(s.List());
+    return Results.Ok(new { removed, remaining = s.List().Count });
+});
+
 app.UseStaticFiles();
 
 app.Run();

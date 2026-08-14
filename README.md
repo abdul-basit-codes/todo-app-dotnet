@@ -27,6 +27,7 @@ A fully working full-stack to-do application:
 | GET    | /api/todos/summary | Progress summary (counts + percent) |
 | GET    | /api/todos/:id    | Get one task             |
 | POST   | /api/todos        | Create a task            |
+| POST   | /api/todos/clear-completed | Delete all completed tasks |
 | PUT    | /api/todos/:id    | Update title / completed |
 | DELETE | /api/todos/:id    | Delete a task            |
 | GET    | /api/health       | Health check             |

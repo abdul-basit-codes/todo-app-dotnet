@@ -188,7 +188,7 @@ async function clearCompleted() {
   if (!confirm("Delete " + done.length + " completed task" + (done.length > 1 ? "s" : "") + "?")) return;
 
   try {
-    await Promise.all(done.map((t) => api("DELETE", API + "/" + t.id)));
+    await api("POST", API + "/clear-completed");
     await loadTasks();
   } catch (e) {
     alert(e.message);

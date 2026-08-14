@@ -66,6 +66,24 @@ public class TodoStore
     }
 
     /// <summary>
+    /// Removes every completed task. Returns how many were removed.
+    /// </summary>
+    public int DeleteCompleted()
+    {
+        var completedIds = _items
+            .Where(kv => kv.Value.Completed)
+            .Select(kv => kv.Key)
+            .ToList();
+
+        foreach (var id in completedIds)
+        {
+            _items.TryRemove(id, out _);
+        }
+
+        return completedIds.Count;
+    }
+
+    /// <summary>
     /// Replaces the entire store contents (used when loading from disk).
     /// </summary>
     public void ReplaceAll(IEnumerable<TodoItem> items)

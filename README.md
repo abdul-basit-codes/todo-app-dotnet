@@ -24,6 +24,7 @@ A fully working full-stack to-do application:
 | Method | Route             | Description              |
 |--------|-------------------|--------------------------|
 | GET    | /api/todos        | List all tasks           |
+| GET    | /api/todos/search?q=term | Search tasks by title |
 | GET    | /api/todos/summary | Progress summary (counts + percent) |
 | GET    | /api/todos/:id    | Get one task             |
 | POST   | /api/todos        | Create a task            |
@@ -54,6 +55,16 @@ dotnet run
 
 Then open http://localhost:5123 in your browser (check the console for the
 exact port).
+
+## Example requests
+
+```sh
+curl http://localhost:5123/api/todos
+curl -X POST http://localhost:5123/api/todos -H "Content-Type: application/json" -d '{"title":"Ship v2"}'
+curl "http://localhost:5123/api/todos/search?q=ship"
+curl -X POST http://localhost:5123/api/todos/clear-completed
+curl http://localhost:5123/api/todos/summary
+```
 
 ## Run with Docker
 

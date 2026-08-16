@@ -22,6 +22,19 @@ app.MapGet("/api/health", () => Results.Ok(new { status = "ok", service = "todo-
 
 app.MapGet("/api/todos", (TodoStore s) => Results.Ok(s.List()));
 
+app.MapGet("/api/todos/search", (string? q, TodoStore s) =>
+{
+    var items = s.List();
+    if (string.IsNullOrWhiteSpace(q))
+    {
+        return Results.Ok(items);
+    }
+
+    return Results.Ok(items
+        .Where(i => i.Title.Contains(q, StringComparison.OrdinalIgnoreCase))
+        .ToList());
+});
+
 app.MapGet("/api/todos/summary", (TodoStore s) =>
 {
     var items = s.List();

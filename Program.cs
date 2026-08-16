@@ -16,6 +16,14 @@ builder.Services.AddSingleton(persistence);
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+    var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+    await next();
+    stopwatch.Stop();
+    Console.WriteLine($"[{DateTime.UtcNow:O}] {context.Request.Method} {context.Request.Path}{context.Request.QueryString} -> {context.Response.StatusCode} in {stopwatch.ElapsedMilliseconds}ms");
+});
+
 app.MapGet("/", () => Results.Redirect("/index.html"));
 
 app.MapGet("/api/health", () => Results.Ok(new { status = "ok", service = "todo-app" }));

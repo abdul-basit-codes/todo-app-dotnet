@@ -137,6 +137,11 @@ app.MapPost("/api/todos/clear-completed", (TodoStore s, TodoStorePersistence p) 
 
 app.UseStaticFiles();
 
+app.Lifetime.ApplicationStarted.Register(() =>
+    Console.WriteLine($"[startup] TodoApp listening, {store.List().Count} tasks loaded"));
+app.Lifetime.ApplicationStopping.Register(() =>
+    Console.WriteLine("[shutdown] flushing todo store and stopping"));
+
 app.Run();
 
 public record TodoCreateRequest(string Title);

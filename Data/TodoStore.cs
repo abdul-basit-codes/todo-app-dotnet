@@ -84,6 +84,40 @@ public class TodoStore
     }
 
     /// <summary>
+    /// Marks every task completed. Returns how many were changed.
+    /// </summary>
+    public int CompleteAll()
+    {
+        int changed = 0;
+        foreach (var item in _items.Values)
+        {
+            if (!item.Completed)
+            {
+                item.Completed = true;
+                changed++;
+            }
+        }
+        return changed;
+    }
+
+    /// <summary>
+    /// Marks every task active. Returns how many were changed.
+    /// </summary>
+    public int ResetAll()
+    {
+        int changed = 0;
+        foreach (var item in _items.Values)
+        {
+            if (item.Completed)
+            {
+                item.Completed = false;
+                changed++;
+            }
+        }
+        return changed;
+    }
+
+    /// <summary>
     /// Replaces the entire store contents (used when loading from disk).
     /// </summary>
     public void ReplaceAll(IEnumerable<TodoItem> items)

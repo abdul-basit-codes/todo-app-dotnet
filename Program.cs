@@ -135,6 +135,20 @@ app.MapPost("/api/todos/clear-completed", (TodoStore s, TodoStorePersistence p) 
     return Results.Ok(new { removed, remaining = s.List().Count });
 });
 
+app.MapPost("/api/todos/complete-all", (TodoStore s, TodoStorePersistence p) =>
+{
+    var changed = s.CompleteAll();
+    p.Save(s.List());
+    return Results.Ok(new { changed });
+});
+
+app.MapPost("/api/todos/reset-all", (TodoStore s, TodoStorePersistence p) =>
+{
+    var changed = s.ResetAll();
+    p.Save(s.List());
+    return Results.Ok(new { changed });
+});
+
 app.UseStaticFiles();
 
 app.Lifetime.ApplicationStarted.Register(() =>

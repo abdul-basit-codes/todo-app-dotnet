@@ -28,7 +28,34 @@ app.MapGet("/", () => Results.Redirect("/index.html"));
 
 app.MapGet("/api/health", () => Results.Ok(new { status = "ok", service = "todo-app" }));
 
-app.MapGet("/api/todos", (TodoStore s) => Results.Ok(s.List()));
+app.MapGet("/api/todos", (int? limit, int? offset, TodoStore s) =>
+{
+    var items = s.List();
+    if (offset is > 0)
+    {
+        items = items.Skip(offset.Value).ToList();
+    }
+    if (limit is > 0)
+    {
+        items = items.Take(limit.Value).ToList();
+    }
+    return Results.Ok(items);
+});
+
+app.MapGet("/api/todos/stats", (TodoStore s) =>
+{
+    var items = s.List();
+    var completed = items.Count(i => i.Completed);
+    return Results.Ok(new
+    {
+        total = items.Count,
+        completed,
+        active = items.Count - completed,
+        percent = items.Count == 0 ? 0 : (int)Math.Round(completed * 100.0 / items.Count),
+        longest = items.OrderByDescending(i => i.Title.Length).FirstOrDefault()?.Title.Length ?? 0,
+        newest = items.OrderByDescending(i => i.CreatedAt).FirstOrDefault()?.Id,
+    });
+});
 
 app.MapGet("/api/todos/search", (string? q, TodoStore s) =>
 {

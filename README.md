@@ -24,11 +24,15 @@ A fully working full-stack to-do application:
 | Method | Route             | Description              |
 |--------|-------------------|--------------------------|
 | GET    | /api/todos        | List all tasks           |
+| GET    | /api/todos?limit=5&offset=10 | Paged list   |
 | GET    | /api/todos/search?q=term | Search tasks by title |
+| GET    | /api/todos/stats   | Stats (counts, longest title, newest) |
 | GET    | /api/todos/summary | Progress summary (counts + percent) |
 | GET    | /api/todos/:id    | Get one task             |
 | POST   | /api/todos        | Create a task            |
 | POST   | /api/todos/clear-completed | Delete all completed tasks |
+| POST   | /api/todos/complete-all | Mark every task completed |
+| POST   | /api/todos/reset-all | Mark every task active |
 | PUT    | /api/todos/:id    | Update title / completed |
 | DELETE | /api/todos/:id    | Delete a task            |
 | GET    | /api/health       | Health check             |
